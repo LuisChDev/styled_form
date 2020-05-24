@@ -66,6 +66,7 @@ class PassMatch extends React.Component {
     }
 }
 
+
 class FancyForm extends React.Component {
     constructor(props) {
         super(props);
@@ -74,8 +75,8 @@ class FancyForm extends React.Component {
             nombre2: null,
             apellido1: null,
             apellido2: null,
-            contrasena1: "",
-            contrasena2: "",
+            password: "",
+            password_conf: "",
             tipoId: null,
             identificacion: null,
             email: null,
@@ -89,6 +90,30 @@ class FancyForm extends React.Component {
         });
     }
 
+    /**
+     * genera una lista de campos de formulario.
+     * se le pasa una lista de listas, cada una de las cuales debe tener
+     * un primer campo con el ID de la entrada, y un segundo campo con el título
+     * y el placeholder.
+     */
+    formFields(fields) {
+        return fields.map(val => {
+            let ident = val[0];
+            let nombre = val[1];
+            return (
+                <div className="entrada-formulario">
+                  <label className="etiqueta" htmlFor={ident}>
+                    {nombre}
+                  </label>
+                  <input placeholder={nombre}
+                         className="casilla-formulario"
+                         id={ident} name={ident} type="text"
+                         value={this.state.ident}
+                         onChange={this.actualizar} />
+                </div>
+            );
+        });
+    }
 
     render() {
         return (
@@ -101,74 +126,22 @@ class FancyForm extends React.Component {
               </div>
               <form action="/" method="POST">
 
-                <div className="entrada-formulario">
-                  <label className="etiqueta" htmlFor="nombre1">
-                    Nombre
-                  </label>
-                  <input placeholder="nombre"
-                         className="casilla-formulario" name="nombre1"
-                         value={this.state.nombre1} id="nombre1" type="text"
-                         onChange={this.actualizar}/>
-                </div>
+                {this.formFields([
+                    ["nombre1", "Nombre"],
+                    ["nombre2", "Segundo Nombre"],
+                    ["apellido1", "Apellido"],
+                    ["apellido2", "Segundo Apellido"],
+                    ["password", "Contraseña"],
+                ])}
 
-                <div className="entrada-formulario">
-                  <label className="etiqueta" htmlFor="nombre2">
-                    Segundo nombre
-                  </label>
-                  <input placeholder="segundo nombre"
-                         className="casilla-formulario"
-                         id="nombre2" type="text"
-                         name="nombre2"
-                         value={this.state.nombre2}
-                         onChange={this.actualizar}/>
-                </div>
+                <PasswordMeter pass={this.state.password}/>
 
-                <div className="entrada-formulario">
-                  <label className="etiqueta" htmlFor="apellido1">
-                    Apellido
-                  </label>
-                  <input placeholder="apellido"
-                         className="casilla-formulario"
-                         id="apellido1" name="apellido1" type="text"
-                         value={this.state.apellido1}
-                         onChange={this.actualizar}/>
-                </div>
+                {this.formFields([
+                    ["password_conf", "Confirmar contraseña"]
+                ])}
 
-                <div className="entrada-formulario">
-                  <label className="etiqueta" htmlFor="apellido2">
-                    Segundo Apellido
-                  </label>
-                  <input placeholder="segundo apellido"
-                         className="casilla-formulario"
-                         id="apellido2" name="apellido2" type="text"
-                         value={this.state.apellido2}
-                         onChange={this.actualizar}/>
-                </div>
-
-                <div className="entrada-formulario">
-                  <label className="etiqueta" htmlFor="password">
-                    Contraseña
-                  </label>
-                  <input className="casilla-formulario" id="password"
-                         name="contrasena1" type="password"
-                         value={this.state.contrasena1}
-                         onChange={this.actualizar}/>
-                </div>
-
-                <PasswordMeter pass={this.state.contrasena1}/>
-
-                <div className="entrada-formulario">
-                  <label className="etiqueta" htmlFor="password-conf">
-                    Confirmar contraseña
-                  </label>
-                  <input className="casilla-formulario"
-                         id="password-conf" name="contrasena2"
-                         type="password" value={this.state.contrasena2}
-                         onChange={this.actualizar}/>
-                </div>
-
-                <PassMatch pass={this.state.contrasena1}
-                           confPass={this.state.contrasena2}/>
+                <PassMatch pass={this.state.password}
+                           confPass={this.state.password_conf}/>
 
                 <div className="entrada-formulario">
                   <label className="etiqueta" htmlFor="tipo-id">
@@ -185,27 +158,10 @@ class FancyForm extends React.Component {
                   <label htmlFor="tipo-id-ce">C.E.</label>
                 </div>
 
-                <div className="entrada-formulario">
-                  <label className="etiqueta" htmlFor="identificacion">
-                    # de identificación
-                  </label>
-                  <input id="identificacion" name="identificacion"
-                         type="text" placeholder="identificación"
-                         className="casilla-formulario"
-                         value={this.state.identificacion}
-                         onChange={this.actualizar}/>
-                </div>
-
-                <div className="entrada-formulario">
-                  <label className="etiqueta" htmlFor="email">
-                    Correo electrónico
-                  </label>
-                  <input id="email" name="email"
-                         type="text" placeholder="correo electronico"
-                         className="casilla-formulario"
-                         value={this.state.email}
-                         onChange={this.actualizar}/>
-                </div>
+                {this.formFields([
+                    ["identificacion", "# de identificación"],
+                    ["email", "Correo electrónico"]
+                ])}
 
                 <input id="enviar-formulario" type="submit"
                        value="Registrarse"/>
